@@ -11,3 +11,8 @@ data("TRAIN")
 head(TRAIN)
 
 jornada_59<-quinielaR::leer_pronostico(59)
+
+
+remotes::install_github("auroymad/quinielaR", force = TRUE)
+library(quinielaR)
+leer_pronostico(59)
