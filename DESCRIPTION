@@ -1,0 +1,17 @@
+Package: quinielaR
+Type: Package
+Title: Web Scraping y Procesamiento de Datos de La Quiniela
+Version: 0.1.0
+Author: Miguel Ángel Daza Árboli
+Maintainer: Miguel Ángel Daza Árboli <mdaza@est-econ.uc3m.es>
+Description: Herramientas para descargar, limpiar y estructurar datos de La Quiniela, incluyendo temporadas históricas, jornadas actuales y jornadas a pronosticar.
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Imports:
+    rvest,
+    tidyverse,
+    stringi
+RoxygenNote: 7.3.3
+Depends: 
+    R (>= 3.5)

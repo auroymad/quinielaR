@@ -1,0 +1,36 @@
+# quinielaR
+
+Paquete para descargar, limpiar y estructurar datos de La Quiniela.
+
+## Funciones principales
+
+### leer_temporada(temporada, max_jornada)
+Descarga una temporada histórica completa.
+
+### leer_jornada(jornada)
+Descarga una jornada de la temporada actual.
+
+### leer_actual(desde, hasta)
+Descarga varias jornadas de la temporada actual.
+
+### leer_pronostico(jornada)
+Descarga la jornada que está por jugarse.
+
+## Instalación
+
+```r
+devtools::install_local("quinielaR")
+```
+
+
+
+Ejemplo de uso:
+
+```r
+library(quinielaR)
+
+train <- leer_temporada(2020, 63)
+test  <- leer_actual(1, 55)
+valid <- leer_actual(56, 58)
+pred  <- leer_pronostico(59)
+```
