@@ -10,38 +10,31 @@ leer_pronostico <- function(jornada){
   tmp2 <- html_nodes(tmp, "table")
   tabla1 <- html_table(tmp2[[1]], fill = TRUE)
   
-  # Selección de columnas relevantes
-  df <- tabla1[, c(1, 2, 3, 8, 9)]
-  names(df) <- c("num", "Local", "Visitante", "sistema", "users")
+  ntabla <- tabla1[, c(1:3, 8, 9)]
+  ntabla <- ntabla[!grepl("^Incluido en tu suscripción", ntabla$`#`), ]
   
-  # Limpieza básica de textos
-  df$Local     <- stringr::str_squish(df$Local)
-  df$Visitante <- stringr::str_squish(df$Visitante)
+  idx <- match(1:14, ntabla$`#`)
+  mtabla <- ntabla[idx, ]
   
-  # Extraer probabilidades Q1, QX, Q2 del bloque users
-  probs <- stringr::str_extract_all(df$users, "\\d+%")
+  names(mtabla) <- c("num","Local","Visitante","sistema","users")
   
-  # Convertir a matriz numérica
-  probs <- lapply(probs, function(x){
-    x <- gsub("%", "", x)
-    x <- as.numeric(x)
-    # Nos quedamos con las 3 primeras (Q1, QX, Q2)
-    x[1:3]
-  })
+  mtabla$USER <- substr(mtabla$users, 1, 1)
   
-  probs_mat <- do.call(rbind, probs)
-  colnames(probs_mat) <- c("Q1", "QX", "Q2")
+  # Parseo de Local y Visitante con el parser nuevo
+  local_df     <- do.call(rbind, lapply(mtabla$Local,     parse_fila_simple))
+  visitante_df <- do.call(rbind, lapply(mtabla$Visitante, parse_fila_simple))
   
-  # Añadir columnas limpias
-  df$Q1 <- probs_mat[, "Q1"]
-  df$QX <- probs_mat[, "QX"]
-  df$Q2 <- probs_mat[, "Q2"]
+  names(local_df)     <- c("Local", "FL")
+  names(visitante_df) <- c("Visitante", "FV")
   
-  df$NumJornada <- jornada
-  df$Temporada  <- 2025
+  mtabla <- cbind(mtabla, local_df, visitante_df)
   
-  # Selección final de columnas limpias
-  df_final <- df[, c("num", "Local", "Visitante", "Q1", "QX", "Q2", "NumJornada", "Temporada")]
+  users_df <- do.call(rbind, lapply(mtabla$users, parse_users))
+  mtabla <- cbind(mtabla, users_df)
   
-  return(df_final)
+  mtabla$NumJornada <- jornada
+  mtabla$Temporada  <- 2025
+  
+  mtabla<-mtabla[,c(1,4,6:15)]
+  mtabla<-mtabla[, c(1,4:7,2,8:10,3,11:12)]
 }
