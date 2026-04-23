@@ -2,6 +2,8 @@
 #' @param jornada Número de jornada
 #' @return Data frame con los 14 partidos
 #' @export
+#' @import rvest
+#' @import xml2
 leer_jornada <- function(jornada){
   
   url <- paste0("https://www.quiniela15.com/resultados-quiniela/", jornada)

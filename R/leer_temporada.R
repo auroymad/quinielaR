@@ -2,6 +2,9 @@
 #' @param temporada Año de la temporada (2020 = 2020/21)
 #' @param max_jornada Número total de jornadas de esa temporada
 #' @export
+#' @import rvest
+#' @import xml2
+
 leer_temporada <- function(temporada, max_jornada){
   
   tablas <- list()

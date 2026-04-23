@@ -1,6 +1,8 @@
 #' Lee la jornada que está por jugarse
 #' @param jornada Número de jornada
 #' @export
+#' @import rvest
+#' @import xml2
 leer_pronostico <- function(jornada){
   
   url <- paste0("https://www.quiniela15.com/resultados-quiniela/", jornada)
