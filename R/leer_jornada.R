@@ -14,9 +14,9 @@ leer_jornada <- function(jornada){
   ntabla <- tabla1[, c(1:6, 10:25)]
   ntabla <- ntabla[!grepl("^Incluido en tu suscripción", ntabla$`#`), ]
   
-  idx  <- match(1:14, ntabla$`#`)
-  idx2 <- sort(c(idx, idx+1))
-  ntabla <- ntabla[idx2, ]
+  # idx  <- match(1:14, ntabla$`#`)
+  # idx2 <- sort(c(idx, idx+1))
+  # ntabla <- ntabla[idx2, ]
   
   idx <- match(1:14, ntabla$`#`)
   mtabla <- cbind(ntabla[idx, c(1:6)], ntabla[idx+1, c(7:22)])
@@ -28,22 +28,26 @@ leer_jornada <- function(jornada){
   mtabla <- mtabla[, -c(7:10, 11, 15, 19)]
   names(mtabla) <- c("num","Fuerza","Goles","real","sistema","users", result)
   
-  tabla3 <- mtabla
+  tabla3 <- mtabla[, c(1:9)]
   tabla3$USER <- substr(tabla3$users, 1, 1)
   
-  local_df     <- do.call(rbind, lapply(tabla3$Local,     parse_fila))
-  visitante_df <- do.call(rbind, lapply(tabla3$Visitante, parse_fila))
+  res <- do.call(rbind, lapply(tabla3$Fuerza,     parse_fila))
+  # visitante_df <- do.call(rbind, lapply(tabla3$Visitante, parse_fila))
   
-  tabla3 <- cbind(tabla3, local_df, visitante_df)
+  tabla3 <- cbind(tabla3, res)
   
-  users_df <- do.call(rbind, lapply(tabla3$users, parse_users))
-  tabla3 <- cbind(tabla3, users_df)
+  # users_df <- do.call(rbind, lapply(tabla3$users, parse_users))
+  # tabla3 <- cbind(tabla3, users_df)
+  
+  tabla3<-tabla3[,-c(2,3,6)]
   
   tabla3$aciertoU <- 1*(tabla3$real == tabla3$USER)
   tabla3$aciertoS <- 1*(tabla3$real == tabla3$sistema)
   
   tabla3$NumJornada <- jornada
   tabla3$Temporada  <- 2025
+  
+  tabla3<-tabla3[, c(1,2,8:11,3,4:7,14:15,12:13)]
   
   tabla3
 }

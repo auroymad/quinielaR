@@ -22,9 +22,9 @@ leer_temporada <- function(temporada, max_jornada){
     ntabla <- ntabla[, -c(7:13)]
     ntabla <- ntabla[!grepl("^Incluido en tu suscripción", ntabla$`#`), ]
     
-    idx  <- match(1:14, ntabla$`#`)
-    idx2 <- sort(c(idx, idx+1))
-    ntabla <- ntabla[idx2, ]
+    # idx  <- match(1:14, ntabla$`#`)
+    # idx2 <- sort(c(idx, idx+1))
+    # ntabla <- ntabla[idx2, ]
     
     idx <- match(1:14, ntabla$`#`)
     mtabla <- cbind(ntabla[idx, 1:6], ntabla[idx+1, 7:ncol(ntabla)])
@@ -38,16 +38,20 @@ leer_temporada <- function(temporada, max_jornada){
     
     mtabla$USER <- substr(mtabla$users, 1, 1)
     
-    local_df     <- do.call(rbind, lapply(mtabla$Local,     parse_fila))
-    visitante_df <- do.call(rbind, lapply(mtabla$Visitante, parse_fila))
+    res <- do.call(rbind, lapply(mtabla$Fuerza,     parse_fila))
+    # visitante_df <- do.call(rbind, lapply(tabla3$Visitante, parse_fila))
     
-    mtabla <- cbind(mtabla, local_df, visitante_df)
+    mtabla <- cbind(mtabla, res)
     
     mtabla$aciertoU <- 1*(mtabla$real == mtabla$USER)
     mtabla$aciertoS <- 1*(mtabla$real == mtabla$sistema)
     
     mtabla$NumJornada <- j
     mtabla$Temporada  <- temporada
+    
+    mtabla<-mtabla[,-c(2,3,6)]
+    
+    mtabla<-mtabla[, c(1,2,8:11,3,4:7,14:15,12:13)]
     
     tablas[[j]] <- mtabla
   }

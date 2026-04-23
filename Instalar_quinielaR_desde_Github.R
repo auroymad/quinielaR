@@ -16,3 +16,5 @@ jornada_59<-quinielaR::leer_pronostico(59)
 remotes::install_github("auroymad/quinielaR", force = TRUE)
 library(quinielaR)
 leer_pronostico(59)
+
+jornadas_56_58<-quinielaR::leer_actual(56,58)
